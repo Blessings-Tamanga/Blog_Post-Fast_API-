@@ -23,3 +23,16 @@ def get_post():
 def delete_post():
     pass
 
+@router.post("/login")
+def login():
+    pass
+
+
+@router.get("/users")
+def get_users():
+    pass
+
+@router.update("/users/{id}")
+def update_users():
+    pass
+

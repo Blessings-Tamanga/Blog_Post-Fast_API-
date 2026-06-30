@@ -1,3 +1,3 @@
-from models import PostsModel
+from Backend.models import PostsModel
 from schemas import PostSchema
 
