@@ -9,8 +9,14 @@ class PostModel(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     content = Column(String, nullable=False)
-    created_at = Column(String, default=datetime.utcnow)
-    updated_at = Column(String, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
     author_id = Column(Integer, ForeignKey("user_id", ondelete="CASCADE"), nullable=False)
+    parent_id = Column(Integer, ForeignKey("posts.id"), nullable=False)
+
+    view_count = Column(Integer, default=0)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    
+    #relationships
     author = relationship("UserModel", back_populates="posts")
+    answers = relationship("PostModel", back_populates="question", remote_id=[id]) #self refernces
