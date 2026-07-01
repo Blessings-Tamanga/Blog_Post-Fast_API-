@@ -6,10 +6,17 @@ from typing import Optional
 class UserBaseSchema(BaseModel):
     username: str
     email: str
+    bio: str
+    profile_pic: str
 
 #schema for receiving data during registration
 class UserCreateSchema(UserBaseSchema):
     password: str
+
+#schema for updating user profile
+class UserUpdateSchema(BaseModel):
+    bio: Optional[str] = None
+    profile_pic: Optional[str] = None
 
 #schema for sending data back to frontend
 class UserResponseSchema(UserBaseSchema):

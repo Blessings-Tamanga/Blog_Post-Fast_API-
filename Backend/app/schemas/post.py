@@ -1,26 +1,34 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
-from ..schemas.user import UserResponse
+from typing import Optional,List
+from .user import UserResponseSchema
 
 #Base Post layout
 class PostBaseSchema(BaseModel):
-    title: str
+    title: Optional[str] = None
     content: str
 
-#Input schema for creating a new post(Vanilla)
-class PostCreateSchema(PostBaseSchema):
-    pass
+#question schema for questions
+class QuestionCreateSchema(PostBaseSchema):
+    title: str
+
+#required for question being answered
+class AnswerCreateSchema(PostBaseSchema):
+    parent_id: int
 
 class PostUpdateSchema(PostBaseSchema):
-    title: Optional[str]
-    content: Optional[str]
+    title: Optional[str] = None
+    content: Optional[str] = None
 
 #output schema for sending data back to frontend
-class PostResponseSchema(PostBaseSchema):
+class PostResponseSchema(BaseModel):
     id: int
-    date: datetime
-    user: UserResponse
-
+    title: Optional[str]
+    content: str
+    created_at: datetime
+    updated_at: Optional[datetime]
+    author: UserResponseSchema
+    answer_count: Optional[int] = 0
+    answers: Optional[List["PostResponseSchema"]] = []
     class Config:
         from_attributes = True
