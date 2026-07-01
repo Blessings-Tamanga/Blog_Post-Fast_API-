@@ -7,9 +7,8 @@ class configSettings(BaseSettings):
     ALGORITHM: str
     TOKEN_EXPIRE_MINUTES: int
     CORS_ORIGIN: List[str]
-    
     class config:
         env_file = ".env"
         env_file_encoding = "utf-8"
 
-setting = Settings()
+settings = configSettings()
