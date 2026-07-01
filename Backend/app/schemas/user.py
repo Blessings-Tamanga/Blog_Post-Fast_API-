@@ -5,7 +5,7 @@ from typing import Optional
 #Base configuration shared by all user representation
 class UserBaseSchema(BaseModel):
     username: str
-    email: str
+    email: EmailStr
     bio: str
     profile_pic: str
 
