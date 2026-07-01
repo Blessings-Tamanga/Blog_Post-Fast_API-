@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users | Stark-OverNacit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #004d3b;
+            --primary-container: #0066ff;
+            --on-primary: #ffffff;
+            --surface: #faf8ff;
+            --surface-lowest: #ffffff;
+            --surface-low: #f2f3ff;
+            --surface-container: #eaedff;
+            --surface-high: #e2e7ff;
+            --surface-highest: #dae2fd;
+            --on-surface: #131b2e;
+            --on-surface-variant: #424656;
+            --outline: #727687;
+            --outline-variant: #c2c6d8;
+            --secondary: #505f76;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--surface);
+            color: var(--on-surface);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; font-family: inherit; border: none; background: none; }
+        input { font-family: inherit; outline: none; }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--surface);
+            border-bottom: 1px solid var(--outline-variant);
+            height: 64px;
+        }
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .brand { font-size: 20px; font-weight: 700; }
+        
+        .nav-links { display: none; gap: 24px; margin-left: 24px; }
+        @media (min-width: 768px) { .nav-links { display: flex; } }
+        .nav-links a {
+            font-size: 14px;
+            color: var(--on-surface-variant);
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-links a.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            font-weight: 700;
+            padding-bottom: 4px;
+        }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .search-box {
+            position: relative;
+            display: none;
+        }
+        @media (min-width: 1024px) { .search-box { display: block; } }
+        .search-box .icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--outline);
+        }
+        .search-box input {
+            background: var(--surface-low);
+            border: 1px solid var(--outline-variant);
+            border-radius: 8px;
+            padding: 8px 16px 8px 40px;
+            font-size: 14px;
+            width: 256px;
+            transition: border-color 0.2s;
+        }
+        .search-box input:focus { border-color: var(--primary); }
+
+        .icon-btn {
+            padding: 8px;
+            border-radius: 50%;
+            color: var(--on-surface-variant);
+            transition: background 0.2s;
+        }
+        .icon-btn:hover { background: var(--surface-low); }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--outline-variant);
+            object-fit: cover;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s;
+            display: none;
+        }
+        @media (min-width: 768px) { .btn-primary { display: block; } }
+        .btn-primary:hover { background: var(--primary-container); }
+
+        /* Layout */
+        .layout {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 256px;
+            position: sticky;
+            top: 64px;
+            height: calc(100vh - 64px);
+            border-right: 1px solid var(--outline-variant);
+            background: var(--surface);
+            display: none;
+            flex-direction: column;
+            padding: 32px 0;
+        }
+        @media (min-width: 768px) { .sidebar { display: flex; } }
+
+        .sidebar-header {
+            padding: 0 24px;
+            margin-bottom: 16px;
+        }
+        .sidebar-header .title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--outline);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .sidebar-header .subtitle {
+            font-size: 14px;
+            color: var(--on-surface-variant);
+            opacity: 0.7;
+        }
+
+        .sidebar-nav { display: flex; flex-direction: column; }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: var(--on-surface-variant);
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.15s;
+        }
+        .sidebar-nav a:hover { background: var(--surface-lowest); }
+        .sidebar-nav a.active {
+            color: var(--on-surface);
+            font-weight: 700;
+            border-right: 4px solid var(--primary);
+            background: var(--surface-low);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-bottom: 24px;
+        }
+        .cta-box {
+            background: var(--surface-high);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .cta-box p {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--on-surface-variant);
+            margin-bottom: 8px;
+        }
+        .btn-dark {
+            width: 100%;
+            background: var(--on-surface);
+            color: var(--surface);
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .btn-dark:hover { opacity: 0.9; }
+
+        .sidebar-footer-links a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            color: var(--on-surface-variant);
+            font-size: 13px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .sidebar-footer-links a:hover { color: var(--on-surface); }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 24px;
+        }
+        @media (min-width: 768px) { .main { padding: 32px; } }
+
+        .page-header { margin-bottom: 32px; }
+        .page-title { font-size: 30px; font-weight: 700; margin-bottom: 8px; }
+        .page-desc {
+            font-size: 16px;
+            color: var(--on-surface-variant);
+            max-width: 600px;
+        }
+
+        .filters {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            background: var(--surface-lowest);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--outline-variant);
+        }
+        @media (min-width: 1024px) { 
+            .filters { flex-direction: row; align-items: center; } 
+        }
+
+        .filter-search {
+            position: relative;
+            width: 100%;
+        }
+        @media (min-width: 1024px) { .filter-search { width: 384px; } }
+        .filter-search .icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--outline);
+        }
+        .filter-search input {
+            width: 100%;
+            border: 1px solid var(--outline-variant);
+            border-radius: 4px;
+            padding: 10px 16px 10px 40px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .filter-search input:focus { border-color: var(--primary); }
+
+        .filter-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            width: 100%;
+        }
+        @media (min-width: 1024px) { .filter-btns { width: auto; } }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--on-primary);
+        }
+        .filter-btn:not(.active) {
+            background: transparent;
+            color: var(--on-surface-variant);
+            border: 1px solid var(--outline-variant);
+        }
+        .filter-btn:not(.active):hover {
+            background: var(--surface-low);
+        }
+
+        /* User Grid */
+        .user-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        @media (min-width: 640px) { .user-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .user-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1280px) { .user-grid { grid-template-columns: repeat(4, 1fr); } }
+
+        .user-card {
+            background: var(--surface-lowest);
+            border: 1px solid var(--outline-variant);
+            border-radius: 12px;
+            padding: 16px;
+            transition: box-shadow 0.3s, opacity 0.2s, transform 0.2s;
+        }
+        .user-card:hover {
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .user-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .user-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .user-info { flex: 1; min-width: 0; }
+        .user-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--on-surface);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.2s;
+        }
+        .user-card:hover .user-name { color: var(--primary); }
+
+        .user-location {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--on-surface-variant);
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .user-location .material-symbols-outlined { font-size: 16px; }
+
+        .user-rep {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .user-rep .value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .user-rep .label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--outline);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .user-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--outline-variant);
+        }
+        .tag {
+            padding: 4px 8px;
+            background: var(--surface-container);
+            color: var(--secondary);
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .tag:hover { background: var(--surface-high); }
+        .tag.selected {
+            background: var(--primary);
+            color: var(--on-primary);
+        }
+
+        /* Pagination */
+        .pagination {
+            margin-top: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            border: 1px solid var(--outline-variant);
+            color: var(--on-surface-variant);
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .page-btn:hover { background: var(--surface-low); }
+        .page-btn.active {
+            background: var(--primary);
+            color: var(--on-primary);
+            border-color: var(--primary);
+        }
+        .page-dots { padding: 0 8px; color: var(--outline); }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid var(--outline-variant);
+            background: var(--surface-lowest);
+            padding: 32px 0;
+            margin-top: 48px;
+        }
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+        @media (min-width: 768px) { 
+            .footer-container { flex-direction: row; justify-content: space-between; } 
+        }
+        .footer-brand .name { font-size: 30px; font-weight: 700; }
+        .footer-brand .copy {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-top: 8px;
+        }
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 24px;
+        }
+        .footer-links a {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            transition: color 0.2s;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left">
+                <span class="brand">Stark-OverNacit</span>
+                <nav class="nav-links">
+                    <a href="Ask_question.html">Questions</a>
+                    <a href="tags.html">Tags</a>
+                    <a href="users.html" class="active">Users</a>
+                </nav>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <span class="material-symbols-outlined icon">search</span>
+                    <input type="text" placeholder="Search Stark-OverNacit..." />
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; color: var(--on-surface-variant);">
+                    <button class="icon-btn"><span class="material-symbols-outlined">notifications</span></button>
+                    <button class="icon-btn"><span class="material-symbols-outlined">inbox</span></button>
+                    <button class="icon-btn"><span class="material-symbols-outlined">help</span></button>
+                </div>
+                <img class="avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnIizeK2tn-vTqum_XGJhE-S8ZceXy2QrJ-cgXuaGcejuIP2d_VXg-l-K6pgR5T3qVTuXEUvdmIRP3XUGFy5Rar4xCVALQ53XCNqMRbm-xjXK9A8fnPiZcQEq-f056v5BpGNtjoxinW6P8rVSO7LIx1_XPjfof54aPuoMzwMPlIcly8eETE-UJCbEbwOm8cvlbBbZ3A0WHHjTSkYDCaAuYjWQNCOIkYdKyxpjiCI_iiL7zBPrqS1-b12N2j-fZiK9u-vd30ewgng" alt="User Avatar" />
+                <button class="btn-primary">Ask Question</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <p class="title">PUBLIC</p>
+                <p class="subtitle">Community knowledge</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#"><span class="material-symbols-outlined">home</span> Home</a>
+                <a href="#"><span class="material-symbols-outlined">public</span> Questions</a>
+                <a href="#"><span class="material-symbols-outlined">local_offer</span> Tags</a>
+                <a href="#"><span class="material-symbols-outlined">bookmark</span> Saves</a>
+                <a href="#" class="active"><span class="material-symbols-outlined">group</span> Users</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="cta-box">
+                    <p>Grow with us</p>
+                    <button class="btn-dark">Join Community</button>
+                </div>
+                <div class="sidebar-footer-links">
+                    <a href="#"><span class="material-symbols-outlined">settings</span> Settings</a>
+                    <a href="#"><span class="material-symbols-outlined">chat_bubble</span> Feedback</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="page-header">
+                <h1 class="page-title">Users</h1>
+                <p class="page-desc">
+                    Discover experts and top contributors across the Stark-OverNacit ecosystem. 
+                    Sort by reputation or activity to find the right people for your technical questions.
+                </p>
+            </div>
+
+            <div class="filters">
+                <div class="filter-search">
+                    <span class="material-symbols-outlined icon">search</span>
+                    <input type="text" placeholder="Filter by user..." />
+                </div>
+                <div class="filter-btns">
+                    <button class="filter-btn active">Reputation</button>
+                    <button class="filter-btn">New Users</button>
+                    <button class="filter-btn">Voters</button>
+                    <button class="filter-btn">Editors</button>
+                    <button class="filter-btn">Moderators</button>
+                </div>
+            </div>
+
+            <div class="user-grid">
+                <!-- User 1 -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <img class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfk9dfn-qavcw5ceAKJ9RzveErb1OX5aRu_qiCkdgqQcER4SL7QW5lobDlSULcrZBJI7zOPH-OB9IQennThkF7oenzZlnm_zZi_09uhRg1i6YHewNlDi16q4WTY36Jvy3B_QxQj3V_5pxORdZeZkc7Lt4aGcAOuMb-7AsUfMxxpXpPy21iSPigSyJnB2kD0tStlKQmzha9p3XJJS0Wf8MVQhTV-MqNfneYHIwK6w2CnK5NUVSVaSqkXjAXdDIlxaPCHp_R3qK7Ag" alt="Sarah Chen" />
+                        <div class="user-info">
+                            <h3 class="user-name">Sarah Chen</h3>
+                            <div class="user-location">
+                                <span class="material-symbols-outlined">location_on</span>
+                                <span>San Francisco, CA</span>
+                            </div>
+                            <div class="user-rep">
+                                <span class="value">24.5k</span>
+                                <span class="label">REPUTATION</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-tags">
+                        <span class="tag">javascript</span>
+                        <span class="tag">reactjs</span>
+                        <span class="tag">node.js</span>
+                    </div>
+                </div>
+
+                <!-- User 2 -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <img class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPuMdG8QnEct8DINKGlfy7oXXcYmi1F29fdgru5HmYUKDJi6RDhOy-yHCUUIim_IyDpV7SzFrb75KNzfcI1PyfgPI8MkDczHxgh8N8OUJbGvKf8Y7NOKApBt6kJ8Zt_c3ObUZC88feRuVX7F22NlBnlTfyCIQWH074v_3fk5j-dJIG9io7r7Dta9CuvTN60cDfRgaLTveuqNYw0HreOi9oRJnf2rUnbKVRJ1JUJxzZAIUCsSYvQUGq_oC9PHULbi6BMGQP64LJOg" alt="Marcus Weber" />
+                        <div class="user-info">
+                            <h3 class="user-name">Marcus Weber</h3>
+                            <div class="user-location">
+                                <span class="material-symbols-outlined">location_on</span>
+                                <span>Berlin, Germany</span>
+                            </div>
+                            <div class="user-rep">
+                                <span class="value">18.2k</span>
+                                <span class="label">REPUTATION</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-tags">
+                        <span class="tag">python</span>
+                        <span class="tag">django</span>
+                        <span class="tag">postgresql</span>
+                    </div>
+                </div>
+
+                <!-- User 3 -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <img class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD7dg8etbUF3Z4s2HXGSfMhYSe-ptU6_gqtn-mkuVd30hx-2rRK1d2iQAwolOCr7TU1l2dMQ_mfcigppcNxp6SHIE1XHRIbRxL9kGZMiZDWGpB1jZvC4i9HGzUFZvqcwFf0159dRYI_w7e7WPAT_xh9MsVh4pIwyNrGuG9_9vwOhKlWFf0d2uhTnmm9VvZIa-crKxx-AadJ5W6GtE9Tm7b1ToqwQIehWFhD1ZqA40cTcyUJloq4lgZUCZ9l3Az-k1bU3nzBq6Kow" alt="Anjali Rao" />
+                        <div class="user-info">
+                            <h3 class="user-name">Anjali Rao</h3>
+                            <div class="user-location">
+                                <span class="material-symbols-outlined">location_on</span>
+                                <span>Bangalore, India</span>
+                            </div>
+                            <div class="user-rep">
+                                <span class="value">12.9k</span>
+                                <span class="label">REPUTATION</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-tags">
+                        <span class="tag">java</span>
+                        <span class="tag">spring-boot</span>
+                        <span class="tag">kubernetes</span>
+                    </div>
+                </div>
+
+                <!-- User 4 -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <img class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzSNbh2bKeW8XIiXcPwstE-_rdoZ2KWZ4sy-bYGR61LOEGzQupZGj5ORBe9BtNE7DF9lsfPt-qhsNR6Y2trdLfy805dxs_7z7V8R9-N2FaqtcBvGrgbTc4eXOOBmuJmzLDf25B5h2cMZwnKQEkQFe7GGjfzZBNcYHGsXLtXce3CaY58RU_K0ovGQGq5fI7_9FmQVjTI1CTHaZNu5X7q8rmXflE3-Wn10CvEWX0P1rHY6eaQbqOC68LsSHupku_l_sO-WNXErtYnw" alt="David Sterling" />
+                        <div class="user-info">
+                            <h3 class="user-name">David Sterling</h3>
+                            <div class="user-location">
+                                <span class="material-symbols-outlined">location_on</span>
+                                <span>London, UK</span>
+                            </div>
+                            <div class="user-rep">
+                                <span class="value">42.1k</span>
+                                <span class="label">REPUTATION</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-tags">
+                        <span class="tag">aws</span>
+                        <span class="tag">devops</span>
+                        <span class="tag">security</span>
+                    </div>
+                </div>
+
+                <!-- User 5 -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <img class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0B09bjGGvl0Kb7Dl83Mm2KDMy0Rrmco-VpVMbjaCVY7wxdSTOFqC1hK0TfF5cofAoIStL1-H95Pjo8uM0DOsoz3Xx7dEq5u79Nmsbw0WQ8dwcmN5yjJ-Y_KE5123KkwP-bawFYFI2O2NCV4T2LuWjBHXq37ukqAB4W09iFf2GZJVzlbpjEJnzMUv_42Nwynw74QwRt0CSdLNMQGPSVP-kKbU43PCSjfI3f8jVNiqKjGnUuSrZ2xHqlzodNbGlaSFZzJYsz92nAg" alt="Elena Petrova" />
+                        <div class="user-info">
+                            <h3 class="user-name">Elena Petrova</h3>
+                            <div class="user-location">
+                                <span class="material-symbols-outlined">location_on</span>
+                                <span>Toronto, Canada</span>
+                            </div>
+                            <div class="user-rep">
+                                <span class="value">9.4k</span>
+                                <span class="label">REPUTATION</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-tags">
+                        <span class="tag">vue.js</span>
+                        <span class="tag">typescript</span>
+                        <span class="tag">sass</span>
+                    </div>
+                </div>
+
+                <!-- User 6 -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <img class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAel8HPQI7IvEqDEITgf3phOtrKOdshhGlhzEdFd11sxVrWYnIITvt5kn8ouBR-dNkYYN8x4E5gyHhPMje5quNL-g-ovaaXlhg39BsgCZfHgS-VCVFDi-6GbU5fTmpQXYEu7e8_vQ6zbwpt9OXcHoR97P4Bj4ndfFuvmrUEsy97dm8cKJghK2Bc8SM8FKTdoXl1GmOSnyAXP81vu-HoqjJ7naO481jUKQDz-5G-PtMf_7e5Tj2OWmbMej8dqW5KR3Ov38zAbaI0NA" alt="Carlos Mendez" />
+                        <div class="user-info">
+                            <h3 class="user-name">Carlos Mendez</h3>
+                            <div class="user-location">
+                                <span class="material-symbols-outlined">location_on</span>
+                                <span>Austin, TX</span>
+                            </div>
+                            <div class="user-rep">
+                                <span class="value">15.7k</span>
+                                <span class="label">REPUTATION</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-tags">
+                        <span class="tag">c++</span>
+                        <span class="tag">rust</span>
+                        <span class="tag">embedded</span>
+                    </div>
+                </div>
+
+                <!-- User 7 -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <img class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe30PEJ_8NiLyxakCB0Z-BWd3Y-YYUVTQ5lgeu0n7y9LaQKaO6B2axYMtcjqG7twwNiITE84Zk6QktsIG7wOSEVp4Kea6vs2YOdaue2Em3MdqpVgEisXGlJewhPwgAdciH_OnPATVCIc8YItDcAIVOzR3C0MSQOieigpWCfllvMkidw0OU-LXkf9cLDzu2-oAUGWfz1aVjwZY76jehDfkTawDiKOT7-4axJvzcKUXe7bhdQkhodGx9-CzA-W9bAyov2PpKZSV7ag" alt="Yuki Tanaka" />
+                        <div class="user-info">
+                            <h3 class="user-name">Yuki Tanaka</h3>
+                            <div class="user-location">
+                                <span class="material-symbols-outlined">location_on</span>
+                                <span>Tokyo, Japan</span>
+                            </div>
+                            <div class="user-rep">
+                                <span class="value">31.0k</span>
+                                <span class="label">REPUTATION</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-tags">
+                        <span class="tag">machine-learning</span>
+                        <span class="tag">pandas</span>
+                        <span class="tag">pytorch</span>
+                    </div>
+                </div>
+
+                <!-- User 8 -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <img class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHYpzVMI1tYaiX4HkkvF2Zigq6i-LnMjgoTzfSKwn0rvF7RwZKBRBvc1SLsgf2xjYJmR2xNGSlIl0MSF8Dd960nK2xNIrgNVY3rkuiXXVBGnwDQfqK11QvXEZvlSLuAU5xf64GOGdoNr0HQ-ATHjnPyECnGfN5QpqRszu0tKWipWtwA0wvdZvhrEnISgU5qh8NleFPjIScmcC4aG425WqOKnTQT8rZuvuCWVm6QTuVhi7cS2_u2y0JxCmBtILXVSl8p9M_TzFjQA" alt="Jordan Smith" />
+                        <div class="user-info">
+                            <h3 class="user-name">Jordan Smith</h3>
+                            <div class="user-location">
+                                <span class="material-symbols-outlined">location_on</span>
+                                <span>New York, NY</span>
+                            </div>
+                            <div class="user-rep">
+                                <span class="value">20.1k</span>
+                                <span class="label">REPUTATION</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-tags">
+                        <span class="tag">graphql</span>
+                        <span class="tag">next.js</span>
+                        <span class="tag">docker</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn"><span class="material-symbols-outlined">chevron_left</span></button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <span class="page-dots">...</span>
+                <button class="page-btn">45</button>
+                <button class="page-btn"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <span class="name">Stark-OverNacit</span>
+                <p class="copy">© 2024 Stark-OverNacit Inc. User contributions licensed under CC BY-SA.</p>
+            </div>
+            <nav class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Cookie Policy</a>
+                <a href="#">Contact</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        // Simple search interactivity
+        const searchInput = document.querySelector('.filter-search input');
+        const userCards = document.querySelectorAll('.user-card');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            userCards.forEach(card => {
+                const name = card.querySelector('.user-name').textContent.toLowerCase();
+                if (name.includes(term)) {
+                    card.style.display = 'block';
+                    card.style.opacity = '1';
+                    card.style.transform = 'scale(1)';
+                } else {
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        if (card.style.opacity === '0') card.style.display = 'none';
+                    }, 200);
+                }
+            });
+        });
+
+        // Tag interaction
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', (e) => {
+                e.preventDefault();
+                tag.classList.toggle('selected');
+            });
+        });
+    </script>
+</body>
+</html>

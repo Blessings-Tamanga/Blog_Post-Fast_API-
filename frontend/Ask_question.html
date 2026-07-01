@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Stark-OverNacit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <style>
+        /* --- Design System & Variables --- */
+        :root {
+            --primary: #004d3b;
+            --primary-container: #01362a;
+            --on-primary: #ffffff;
+            --surface: #faf8ff;
+            --surface-dim: #d2d9f4;
+            --surface-container-low: #f2f3ff;
+            --surface-container: #eaedff;
+            --surface-container-high: #e2e7ff;
+            --surface-container-highest: #dae2fd;
+            --on-surface: #131b2e;
+            --on-surface-variant: #424656;
+            --outline: #727687;
+            --outline-variant: #c2c6d8;
+            --inverse-surface: #283044;
+            --inverse-on-surface: #eef0ff;
+            --secondary-container: #d0e1fb;
+            --error: #ba1a1a;
+            --error-container: #ffdad6;
+
+            --font-main: 'Inter', sans-serif;
+            --font-code: ui-monospace, monospace;
+            --radius-lg: 0.25rem;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* --- Reset & Base --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--surface);
+            color: var(--on-surface);
+            font-size: 14px;
+            line-height: 22px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        input,
+        textarea {
+            font-family: inherit;
+        }
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--outline-variant);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--outline);
+        }
+
+        /* --- Header --- */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--surface);
+            border-bottom: 1px solid var(--outline-variant);
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--on-surface);
+            margin-right: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--on-surface-variant);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            color: var(--on-surface-variant);
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: var(--surface-container-low);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 8px 16px;
+            border-radius: var(--radius-lg);
+            font-weight: 500;
+            font-size: 13px;
+            box-shadow: var(--shadow-sm);
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-container);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.95);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--outline-variant);
+            overflow: hidden;
+        }
+
+        /* --- Main Layout --- */
+        main {
+            flex-grow: 1;
+            max-width: 1280px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 32px 24px;
+        }
+
+        .content-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        @media (min-width: 1024px) {
+            .content-layout {
+                flex-direction: row;
+            }
+        }
+
+        .editor-column {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar-column {
+            width: 100%;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar-column {
+                width: 320px;
+            }
+        }
+
+        /* --- Form Sections --- */
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-size: 30px;
+            line-height: 38px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: var(--on-surface-variant);
+        }
+
+        .form-card {
+            background: #ffffff;
+            border: 1px solid var(--outline-variant);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--on-surface);
+            margin-bottom: 4px;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            line-height: 16px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--outline-variant);
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 80, 203, 0.2);
+        }
+
+        /* --- Editor --- */
+        .editor-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid var(--outline-variant);
+            border-bottom: none;
+            background: var(--surface-container-low);
+            padding: 4px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .toolbar-btn {
+            color: var(--on-surface-variant);
+            padding: 8px;
+            border-radius: var(--radius-lg);
+            transition: background 0.2s;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--surface-container-highest);
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 16px;
+            background: var(--outline-variant);
+            margin: 0 4px;
+        }
+
+        .markdown-editor {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--outline-variant);
+            border-top: none;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+            font-family: var(--font-code);
+            font-size: 14px;
+            min-height: 400px;
+            resize: vertical;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .markdown-editor:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 80, 203, 0.2);
+        }
+
+        /* --- Tags --- */
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .tag-pill {
+            background: var(--surface-container-high);
+            padding: 4px 8px;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .tag-pill button {
+            color: var(--on-surface-variant);
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .tag-pill button:hover {
+            color: var(--error);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* --- Action Bar --- */
+        .action-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+        }
+
+        .btn-danger {
+            color: var(--error);
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: var(--radius-lg);
+            transition: background 0.2s;
+        }
+
+        .btn-danger:hover {
+            background: rgba(255, 218, 214, 0.3);
+        }
+
+        /* --- Sidebar Cards --- */
+        .tip-card {
+            background: var(--surface-container-low);
+            border: 1px solid var(--outline-variant);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tip-card-header {
+            background: var(--surface-container-highest);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--outline-variant);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .tip-card-body {
+            padding: 16px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .tip-icon {
+            color: var(--primary);
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .tip-content {
+            font-size: 14px;
+        }
+
+        .tip-content p {
+            margin-bottom: 8px;
+        }
+
+        .tip-content p:last-child {
+            margin-bottom: 0;
+            color: var(--on-surface-variant);
+        }
+
+        .markdown-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            font-family: var(--font-code);
+            font-size: 14px;
+            color: var(--on-surface-variant);
+        }
+
+        .markdown-row span:last-child {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--on-surface);
+        }
+
+        .markdown-guide {
+            display: inline-block;
+            margin-top: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .markdown-guide:hover {
+            text-decoration: underline;
+        }
+
+        .atmospheric-card {
+            position: relative;
+            height: 192px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--outline-variant);
+        }
+
+        .atmospheric-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            transition: transform 0.7s ease;
+        }
+
+        .atmospheric-card:hover .atmospheric-bg {
+            transform: scale(1.1);
+        }
+
+        .atmospheric-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(250, 248, 255, 0.8), transparent);
+            z-index: 1;
+        }
+
+        .atmospheric-text {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            z-index: 2;
+        }
+
+        .atmospheric-text p:first-child {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--on-surface);
+            margin-bottom: 4px;
+        }
+
+        .atmospheric-text p:last-child {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--on-surface);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: #ffffff;
+            border-top: 1px solid var(--outline-variant);
+            padding: 32px 24px;
+            margin-top: 48px;
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-logo {
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--on-surface);
+            letter-spacing: -0.02em;
+        }
+
+        .footer-copy {
+            font-size: 12px;
+            color: var(--on-surface-variant);
+            margin-top: 8px;
+            max-width: 384px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 12px;
+            color: var(--on-surface-variant);
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 767px) {
+            .nav-links {
+                display: none;
+            }
+
+            .header-icons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- TopNavBar -->
+    <header>
+        <div class="header-inner">
+            <div style="display: flex; align-items: center;">
+                <a class="logo" href="#">Stark-Net</a>
+                <nav class="nav-links">
+                    <a href="index.html">Questions</a>
+                    <a href="#">Tags</a>
+                    <a href="#">Users</a>
+                   
+                </nav>
+            </div>
+            <div class="header-actions">
+                <div class="header-icons" style="display: flex; gap: 8px;">
+                    <button class="icon-btn"><span class="material-symbols-outlined">inbox</span></button>
+                    <button class="icon-btn"><span class="material-symbols-outlined">notifications</span></button>
+                    <button class="icon-btn"><span class="material-symbols-outlined">help</span></button>
+                </div>
+                <div class="avatar">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzfh5GOHv8j5J8J0KM9sa47okZcWdTIUZHxRzPTerIiXcdsuukT8FbB4IRByUbd2AYBl6qz7oRn9161ZC8GKSW7M63ff3EhRl2ZL9SY_m-0UTjTYpm-vqjk1dYKWt4McqK1QqVF1nj_W6wQsxwAnLAJGgGgYK6_-DWjXywdZVLMOSf8NvT7ccUNgwa5CSAxm8oSrgJ3NJjmbSmM67iMkSqA86jGpKFLnKuR4qAS_1JtcYxPzr0uyjeaBdLplmMiu29eIgm61Zo6g"
+                        alt="User Avatar">
+                </div>
+                <a href="Ask_question.html"><button class="btn-primary">Ask Question</button></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <div class="content-layout">
+            <!-- Editor Canvas -->
+            <div class="editor-column">
+                <div class="page-header">
+                    <h1>Ask a public question</h1>
+                    <p>Be specific and imagine you’re asking a question to another person.</p>
+                </div>
+
+                <!-- Step 1: Title -->
+                <section class="form-card">
+                    <div class="form-group">
+                        <label class="form-label" for="post-title">Title</label>
+                        <p class="form-hint">Be specific and imagine you’re asking a question to another person.</p>
+                    </div>
+                    <input class="form-input" id="post-title" type="text"
+                        placeholder="e.g. Is there an R function for finding the index of an element in a vector?" />
+                </section>
+
+                <!-- Step 2: Body/Editor -->
+                <section class="form-card" style="padding: 0; overflow: hidden;">
+                    <div style="padding: 16px 16px 8px 16px;">
+                        <div class="form-group">
+                            <label class="form-label">What are the details of your problem?</label>
+                            <p class="form-hint">Introduce the problem and expand on what you put in the title. Minimum
+                                20 characters.</p>
+                        </div>
+                    </div>
+                    <div class="editor-toolbar">
+                        <button class="toolbar-btn" title="Bold"><span class="material-symbols-outlined"
+                                style="font-size: 18px;">format_bold</span></button>
+                        <button class="toolbar-btn" title="Italic"><span class="material-symbols-outlined"
+                                style="font-size: 18px;">format_italic</span></button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" title="Link"><span class="material-symbols-outlined"
+                                style="font-size: 18px;">link</span></button>
+                        <button class="toolbar-btn" title="Code Block"><span class="material-symbols-outlined"
+                                style="font-size: 18px;">code</span></button>
+                        <button class="toolbar-btn" title="Image"><span class="material-symbols-outlined"
+                                style="font-size: 18px;">image</span></button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" title="Ordered List"><span class="material-symbols-outlined"
+                                style="font-size: 18px;">format_list_numbered</span></button>
+                        <button class="toolbar-btn" title="Unordered List"><span class="material-symbols-outlined"
+                                style="font-size: 18px;">format_list_bulleted</span></button>
+                    </div>
+                    <textarea class="markdown-editor"
+                        placeholder="Write your post content here using Markdown..."></textarea>
+                </section>
+
+                <!-- Step 3: Tags -->
+                <section class="form-card">
+                    <div class="form-group">
+                        <label class="form-label" for="post-tags">Tags</label>
+                        <p class="form-hint">Add up to 5 tags to describe what your question is about.</p>
+                    </div>
+                    <div class="tag-container" id="tag-container">
+                        <span class="tag-pill">
+                            javascript <button><span class="material-symbols-outlined"
+                                    style="font-size: 14px;">close</span></button>
+                        </span>
+                        <span class="tag-pill">
+                            web-development <button><span class="material-symbols-outlined"
+                                    style="font-size: 14px;">close</span></button>
+                        </span>
+                    </div>
+                    <input class="form-input" id="post-tags" type="text" placeholder="e.g. (html react python)" />
+                </section>
+
+                <!-- Action Bar -->
+                <div class="action-bar">
+                    <button class="btn-primary" style="padding: 10px 24px;">Post your question</button>
+                    <button class="btn-danger">Discard draft</button>
+                </div>
+            </div>
+
+            <!-- Sidebar: Tips -->
+            <aside class="sidebar-column">
+                <!-- Tip Card 1 -->
+                <div class="tip-card">
+                    <div class="tip-card-header">Writing a good title</div>
+                    <div class="tip-card-body">
+                        <span class="material-symbols-outlined tip-icon">lightbulb</span>
+                        <div class="tip-content">
+                            <p>Your title should summarize the problem.</p>
+                            <p>You might find that you have a better idea of your title after writing out the rest of
+                                the question.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tip Card 2 -->
+                <div class="tip-card">
+                    <div class="tip-card-header">Markdown Help</div>
+                    <div style="padding: 16px;">
+                        <div class="markdown-row"><span># Header 1</span> <span>H1</span></div>
+                        <div class="markdown-row"><span>**Bold**</span> <span>B</span></div>
+                        <div class="markdown-row"><span>*Italic*</span> <span>I</span></div>
+                        <div class="markdown-row"><span>`inline code`</span> <span>&lt;&gt;</span></div>
+                        <div class="markdown-row"><span>[Link](url)</span> <span class="material-symbols-outlined"
+                                style="font-size: 12px;">link</span></div>
+                        <a class="markdown-guide" href="#">Full Markdown Guide</a>
+                    </div>
+                </div>
+
+                <!-- Atmospheric Card -->
+                <div class="atmospheric-card">
+                    <div class="atmospheric-bg">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ3WoIu_eT6LXqHm1AL_gbYjoED-_uu1CQV_o_mq8lVQI7nU5VokU3AMR34I94yQmIjWkWfmk09KWYbltDtSIpSaDTJ1MRBWXBySlgFiWOHBsXMjOebjKAmgT992W9P7Y3V3rVUoL0MdJ3mVmrX3vtFDYLYC5xP9k9jyRlthCLTcNgDsp_jJOn1FzTkc3yPmO9nrlV4KjfWtu42_mac_Jbr3I3_RerIFqpBcCVnO83GWMiJavx5B0Zl39bXqnOyRaQP64hgwoYXA"
+                            alt="Architecture">
+                    </div>
+                    <div class="atmospheric-overlay"></div>
+                    <div class="atmospheric-text">
+                        <p>Community standards</p>
+                        <p>We are a community of professional knowledge seekers.</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div>
+                <div class="footer-logo">Stark-OverNacit</div>
+                <p class="footer-copy">© 2024 Stark-OverNacit Inc. User contributions licensed under CC BY-SA.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Cookie Policy</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tag input logic
+        const tagInput = document.getElementById('post-tags');
+        const tagContainer = document.getElementById('tag-container');
+
+        if (tagInput && tagContainer) {
+            // Adding tags
+            tagInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && tagInput.value.trim() !== '') {
+                    e.preventDefault();
+                    const value = tagInput.value.trim();
+
+                    const newTag = document.createElement('span');
+                    newTag.className = 'tag-pill';
+                    newTag.innerHTML = `${value} <button><span class="material-symbols-outlined" style="font-size: 14px;">close</span></button>`;
+
+                    tagContainer.appendChild(newTag);
+                    tagInput.value = '';
+                }
+            });
+
+            // Removing tags (Event Delegation for efficiency)
+            tagContainer.addEventListener('click', (e) => {
+                const closeBtn = e.target.closest('button');
+                if (closeBtn) {
+                    const tagPill = closeBtn.closest('.tag-pill');
+                    if (tagPill) {
+                        tagPill.remove();
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

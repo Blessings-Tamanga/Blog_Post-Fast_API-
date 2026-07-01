@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tags - Stark-OverNacit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #faf8ff;
+            --on-bg: #131b2e;
+            --surface: #faf8ff;
+            --surface-lowest: #ffffff;
+            --surface-low: #f2f3ff;
+            --surface-high: #e2e7ff;
+            --surface-highest: #dae2fd;
+           --primary: #004d3b;
+            --primary-container: #0066ff;
+            --on-primary: #ffffff;
+            --on-surface: #131b2e;
+            --on-surface-variant: #424656;
+            --outline: #727687;
+            --outline-variant: #c2c6d8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--on-bg);
+            line-height: 1.5;
+        }
+
+        ::selection {
+            background: #dae1ff;
+            color: #001849;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; font-family: inherit; border: none; background: none; }
+        input { font-family: inherit; }
+
+        /* Header */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--surface);
+            border-bottom: 1px solid var(--outline-variant);
+        }
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-left { display: flex; align-items: center; gap: 32px; flex: 1; }
+        .brand { font-size: 20px; font-weight: 700; color: var(--on-surface); }
+        
+        .search-bar {
+            position: relative;
+            flex: 1;
+            max-width: 500px;
+            display: none;
+        }
+        @media (min-width: 768px) { .search-bar { display: flex; } }
+        .search-bar .icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--outline);
+            transition: color 0.2s;
+        }
+        .search-bar:focus-within .icon { color: var(--primary); }
+        .search-bar input {
+            width: 100%;
+            background: var(--surface-low);
+            border: 1px solid var(--outline-variant);
+            border-radius: 8px;
+            padding: 8px 16px 8px 40px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-bar input:focus { border-color: var(--primary); }
+
+        .nav-links { display: none; gap: 16px; margin: 0 24px; }
+        @media (min-width: 1024px) { .nav-links { display: flex; } }
+        .nav-links a {
+            font-size: 14px;
+            color: var(--on-surface-variant);
+            transition: color 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+        .nav-links a.active { 
+            border-bottom: 2px solid var(--primary); 
+            font-weight: 700; 
+            padding-bottom: 4px; 
+        }
+
+        .nav-actions { display: flex; align-items: center; gap: 16px; }
+        .action-icons { display: none; gap: 16px; }
+        @media (min-width: 768px) { .action-icons { display: flex; } }
+        .icon-btn {
+            color: var(--on-surface-variant);
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .icon-btn:hover { background: var(--surface-low); }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-primary:hover { background: var(--primary-container); }
+        .btn-primary:active { transform: scale(0.95); }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid var(--outline-variant);
+            margin-left: 8px;
+        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Layout */
+        .main-layout {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: none;
+            flex-direction: column;
+            width: 256px;
+            position: sticky;
+            top: 64px;
+            height: calc(100vh - 64px);
+            background: var(--surface);
+            border-right: 1px solid var(--outline-variant);
+            padding: 32px 0;
+        }
+        @media (min-width: 768px) { .sidebar { display: flex; } }
+
+        .sidebar-section { padding: 0 24px; margin-bottom: 8px; }
+        .section-title { font-size: 12px; font-weight: 600; color: var(--outline); text-transform: uppercase; letter-spacing: 0.05em; }
+        .section-subtitle { font-size: 12px; font-weight: 600; color: var(--on-surface-variant); font-style: italic; }
+
+        .sidebar-nav { display: flex; flex-direction: column; width: 100%; }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: var(--on-surface-variant);
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .sidebar-nav a:hover { background: var(--surface-lowest); }
+        .sidebar-nav a.active {
+            color: var(--on-surface);
+            font-weight: 700;
+            border-right: 4px solid var(--primary);
+            background: var(--surface-low);
+        }
+
+        .sidebar-cta { padding: 0 24px; margin-top: 32px; }
+        .btn-outline {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn-outline:hover { background: rgba(0, 80, 203, 0.05); }
+
+        .sidebar-footer { margin-top: auto; }
+        .sidebar-footer a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: var(--on-surface-variant);
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .sidebar-footer a:hover { background: var(--surface-lowest); }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            min-height: 100vh;
+            padding: 32px 24px;
+        }
+        .intro { margin-bottom: 48px; }
+        .page-title { font-size: 30px; font-weight: 700; margin-bottom: 8px; }
+        .page-desc { font-size: 16px; color: var(--on-surface-variant); max-width: 600px; }
+
+        .filters {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+        @media (min-width: 768px) { .filters { flex-direction: row; } }
+
+        .search-filter {
+            position: relative;
+            width: 100%;
+        }
+        @media (min-width: 768px) { .search-filter { width: 320px; } }
+        .search-filter .icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--outline);
+            transition: color 0.2s;
+        }
+        .search-filter:focus-within .icon { color: var(--primary); }
+        .search-filter input {
+            width: 100%;
+            background: var(--surface-lowest);
+            border: 1px solid var(--outline-variant);
+            border-radius: 4px;
+            padding: 10px 16px 10px 40px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-filter input:focus { border-color: var(--primary); }
+
+        .sort-btns { display: flex; gap: 8px; align-self: flex-start; }
+        @media (min-width: 768px) { .sort-btns { align-self: auto; } }
+        .sort-btns button {
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--surface-lowest);
+            color: var(--on-surface-variant);
+            border: 1px solid var(--outline-variant);
+            transition: background 0.2s;
+        }
+        .sort-btns button:hover { background: var(--surface-low); }
+        .sort-btns button.active {
+            background: var(--surface-low);
+            border-color: transparent;
+        }
+
+        /* Tags Grid */
+        .tags-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        @media (min-width: 640px) { .tags-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .tags-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1280px) { .tags-grid { grid-template-columns: repeat(4, 1fr); } }
+
+        .tag-card {
+            background: var(--surface-lowest);
+            border: 1px solid var(--outline-variant);
+            padding: 16px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s;
+        }
+        .tag-card:hover { box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05); }
+
+        .tag-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .tag-name {
+            background: var(--surface-low);
+            color: var(--on-surface-variant);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: ui-monospace, monospace;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .tag-name:hover { background: var(--surface-highest); }
+
+        .follow-btn {
+            border: 1px solid var(--outline-variant);
+            color: var(--on-surface-variant);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .follow-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .follow-btn:active { transform: scale(0.95); }
+        .follow-btn.watching {
+            background: var(--primary);
+            color: var(--on-primary);
+            border-color: var(--primary);
+        }
+
+        .tag-desc {
+            font-size: 14px;
+            color: var(--on-surface-variant);
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .tag-stats {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--outline);
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .tag-stats .trend { display: flex; align-items: center; gap: 4px; }
+        .tag-stats .trend .material-symbols-outlined { font-size: 18px; }
+        .tag-stats .trend .variant { color: var(--on-surface-variant); }
+
+        .load-more {
+            margin-top: 48px;
+            display: flex;
+            justify-content: center;
+        }
+        .btn-load-more {
+            background: var(--surface-low);
+            color: var(--primary);
+            padding: 12px 32px;
+            border-radius: 8px;
+            border: 1px solid var(--outline-variant);
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn-load-more:hover { background: rgba(0, 80, 203, 0.1); }
+
+        /* Footer */
+        .footer {
+            background: var(--surface-lowest);
+            border-top: 1px solid var(--outline-variant);
+            padding: 32px 0;
+            margin-top: 48px;
+        }
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+        @media (min-width: 768px) { 
+            .footer-container { flex-direction: row; justify-content: space-between; } 
+        }
+        .footer-brand { text-align: center; }
+        @media (min-width: 768px) { .footer-brand { text-align: left; } }
+        .footer-brand .brand { color: var(--primary); font-size: 30px; font-weight: 700; }
+        .footer-brand p { font-size: 12px; font-weight: 600; color: #505f76; margin-top: 8px; }
+
+        .footer-links { display: flex; gap: 32px; }
+        .footer-links a {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { text-decoration: underline; color: var(--primary); }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="top-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <h1 class="brand">Stark-OverNacit</h1>
+                <div class="search-bar">
+                    <span class="material-symbols-outlined icon">search</span>
+                    <input type="text" placeholder="Search for anything...">
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html">Questions</a>
+                <a href="tags.html" class="active">Tags</a>
+                <a href="users.html">Users</a>
+            </nav>
+            <div class="nav-actions">
+                <div class="action-icons">
+                    <span class="material-symbols-outlined icon-btn">notifications</span>
+                    <span class="material-symbols-outlined icon-btn">inbox</span>
+                    <span class="material-symbols-outlined icon-btn">help</span>
+                </div>
+                <button class="btn-primary">Ask Question</button>
+                <div class="avatar">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYGwWNBTgw3prkXisKXqnqGXgrcMpHp5l7NS2f-IQ61Oh85zJkA6F2sY5z0KLOKKRqzVcN6BYVgUMcdPWyyHdwrUCUq87KEgsc1SQpya4oAn3gisu_L_BUrx0r8wcpsKaqotLrX4LKib0xSun5E_mAin3qD3dQG42HncyP3SBvix3gRTKixuDejoI4YsFYW4MzDN-Zvnu0-lQmYhyHdW3K44J_rAvfU7PJETJtULavE8jJFl9ltCggPtI0FZR44bXZZYOdKHluag" alt="User Avatar">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <p class="section-title">Public</p>
+                <p class="section-subtitle">Community knowledge</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#"><span class="material-symbols-outlined">home</span> Home</a>
+                <a href="#"><span class="material-symbols-outlined">public</span> Questions</a>
+                <a href="#" class="active"><span class="material-symbols-outlined">local_offer</span> Tags</a>
+                <a href="#"><span class="material-symbols-outlined">bookmark</span> Saves</a>
+                <a href="#"><span class="material-symbols-outlined">group</span> Users</a>
+            </nav>
+            <div class="sidebar-cta">
+                <button class="btn-outline">Join Community</button>
+            </div>
+            <div class="sidebar-footer">
+                <a href="#"><span class="material-symbols-outlined">settings</span> Settings</a>
+                <a href="#"><span class="material-symbols-outlined">chat_bubble</span> Feedback</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <section class="intro">
+                <h1 class="page-title">Tags</h1>
+                <p class="page-desc">A tag is a keyword or label that categorizes your question with other, similar questions. Using the right tags makes it easier for others to find and answer your question.</p>
+                <div class="filters">
+                    <div class="search-filter">
+                        <span class="material-symbols-outlined icon">search</span>
+                        <input type="text" id="tagSearch" placeholder="Filter by tag name">
+                    </div>
+                    <div class="sort-btns">
+                        <button class="active">Popular</button>
+                        <button>Name</button>
+                        <button>New</button>
+                    </div>
+                </div>
+            </section>
+
+            <div class="tags-grid" id="tagsGrid">
+                <!-- JavaScript -->
+                <div class="tag-card">
+                    <div class="tag-header">
+                        <span class="tag-name">#javascript</span>
+                        <button class="follow-btn" onclick="toggleFollow(this)">Watch</button>
+                    </div>
+                    <p class="tag-desc">JavaScript is a lightweight, interpreted programming language with first-class functions that's best known as the scripting language for Web pages.</p>
+                    <div class="tag-stats">
+                        <span>2,541,202 questions</span>
+                        <span class="trend"><span class="material-symbols-outlined">trending_up</span> 410 today</span>
+                    </div>
+                </div>
+                <!-- Python -->
+                <div class="tag-card">
+                    <div class="tag-header">
+                        <span class="tag-name">#python</span>
+                        <button class="follow-btn" onclick="toggleFollow(this)">Watch</button>
+                    </div>
+                    <p class="tag-desc">Python is a multi-paradigm, dynamically-typed, multipurpose programming language. It is designed to be quick to learn and use.</p>
+                    <div class="tag-stats">
+                        <span>2,154,001 questions</span>
+                        <span class="trend"><span class="material-symbols-outlined">trending_up</span> 388 today</span>
+                    </div>
+                </div>
+                <!-- ReactJS -->
+                <div class="tag-card">
+                    <div class="tag-header">
+                        <span class="tag-name">#reactjs</span>
+                        <button class="follow-btn" onclick="toggleFollow(this)">Watch</button>
+                    </div>
+                    <p class="tag-desc">React is a JavaScript library for building user interfaces. It is maintained by Facebook and a community of individual developers and companies.</p>
+                    <div class="tag-stats">
+                        <span>458,920 questions</span>
+                        <span class="trend"><span class="material-symbols-outlined">trending_up</span> 112 today</span>
+                    </div>
+                </div>
+                <!-- Java -->
+                <div class="tag-card">
+                    <div class="tag-header">
+                        <span class="tag-name">#java</span>
+                        <button class="follow-btn" onclick="toggleFollow(this)">Watch</button>
+                    </div>
+                    <p class="tag-desc">Java is a high-level object-oriented programming language. Use this tag when you're having trouble with the language itself or the standard library.</p>
+                    <div class="tag-stats">
+                        <span>1,894,302 questions</span>
+                        <span class="trend"><span class="material-symbols-outlined">trending_flat</span> 95 today</span>
+                    </div>
+                </div>
+                <!-- TypeScript -->
+                <div class="tag-card">
+                    <div class="tag-header">
+                        <span class="tag-name">#typescript</span>
+                        <button class="follow-btn" onclick="toggleFollow(this)">Watch</button>
+                    </div>
+                    <p class="tag-desc">TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. It adds optional static typing and class-based object-oriented programming.</p>
+                    <div class="tag-stats">
+                        <span>240,119 questions</span>
+                        <span class="trend"><span class="material-symbols-outlined">trending_up</span> 180 today</span>
+                    </div>
+                </div>
+                <!-- Rust -->
+                <div class="tag-card">
+                    <div class="tag-header">
+                        <span class="tag-name">#rust</span>
+                        <button class="follow-btn" onclick="toggleFollow(this)">Watch</button>
+                    </div>
+                    <p class="tag-desc">Rust is a multi-paradigm system programming language focused on safety, especially safe concurrency.</p>
+                    <div class="tag-stats">
+                        <span>82,544 questions</span>
+                        <span class="trend"><span class="material-symbols-outlined">trending_up</span> 65 today</span>
+                    </div>
+                </div>
+                <!-- Go -->
+                <div class="tag-card">
+                    <div class="tag-header">
+                        <span class="tag-name">#go</span>
+                        <button class="follow-btn" onclick="toggleFollow(this)">Watch</button>
+                    </div>
+                    <p class="tag-desc">Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.</p>
+                    <div class="tag-stats">
+                        <span>115,220 questions</span>
+                        <span class="trend"><span class="material-symbols-outlined variant">trending_flat</span> 42 today</span>
+                    </div>
+                </div>
+                <!-- SQL -->
+                <div class="tag-card">
+                    <div class="tag-header">
+                        <span class="tag-name">#sql</span>
+                        <button class="follow-btn" onclick="toggleFollow(this)">Watch</button>
+                    </div>
+                    <p class="tag-desc">Structured Query Language (SQL) is a domain-specific language used in programming and designed for managing data held in a relational database.</p>
+                    <div class="tag-stats">
+                        <span>674,103 questions</span>
+                        <span class="trend"><span class="material-symbols-outlined">trending_up</span> 140 today</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="load-more">
+                <button class="btn-load-more">Load more tags</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h2 class="brand">Stark-OverNacit</h2>
+                <p>© 2024 Stark-OverNacit Inc. User contributions licensed under CC BY-SA.</p>
+            </div>
+            <nav class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Cookie Policy</a>
+                <a href="#">Contact</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFollow(btn) {
+            if (btn.classList.contains('watching')) {
+                btn.classList.remove('watching');
+                btn.textContent = 'Watch';
+            } else {
+                btn.classList.add('watching');
+                btn.textContent = 'Watching';
+            }
+        }
+
+        document.getElementById('tagSearch').addEventListener('input', function (e) {
+            const term = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.tag-card');
+
+            cards.forEach(card => {
+                const tagName = card.querySelector('.tag-name').textContent.toLowerCase();
+                const tagDesc = card.querySelector('.tag-desc').textContent.toLowerCase();
+
+                if (tagName.includes(term) || tagDesc.includes(term)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
