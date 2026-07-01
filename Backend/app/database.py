@@ -1,10 +1,9 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.ext import declarative_base
+from sqlalchemy.orm import sessionmaker
+from .config import settings
 
 
-DATABASE_URL = "Sqlite:///./posts.db"
-
-engine = create_engine(DATABASE_URL, connect_arg={"check_same_threads": False})
+engine = create_engine(settings.DATABASE_URL, connect_arg={"check_same_threads": False} if "sqlite" in settings.DATABASE_URL else{})
 SessionlLocal = sessionmaker(autocommit = False, autoflush=False, bind=engine)
-
-Base = declarative_base(bind=engine, AutoCommit = False, AutoFlush = False)
+Base = declarative_base()
